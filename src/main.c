@@ -38,8 +38,56 @@ void upgradeSystem(PackageManagerCommands packager) {
   system(packager.update);
 }
 
+PackageManagerCommands indentifyLinuxDistroPackager() {
+  FILE * fd = fopen("/etc/os-release", "r");
+  if (fd == NULL) {
+    goto MISS_SYS;
+  }
+
+  fseek(fd, 0, SEEK_END);
+  int contentLength = ftell(fd);
+  rewind(fd);
+
+  char * contentBuffer = (char *) calloc(contentLength, sizeof(char));
+  fread(contentBuffer, contentLength, 1, fd);
+  fclose(fd);
+
+  char * status = strstr(contentBuffer, "manjaro");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_PACMAN];
+
+  status = strstr(contentBuffer, "arch");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_PACMAN];
+
+  status = strstr(contentBuffer, "ubuntu");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_APT];
+
+  status = strstr(contentBuffer, "debian");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_APT];
+
+  status = strstr(contentBuffer, "kali");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_APT];
+
+  status = strstr(contentBuffer, "elementary");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_APT];
+
+  status = strstr(contentBuffer, "zorin");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_APT];
+
+  status = strstr(contentBuffer, "opensuse");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_ZYPPER];
+
+  status = strstr(contentBuffer, "fedora");
+  if (status != NULL) return packagers[PACKAGE_MANAGER_DNF];
+
+  goto MISS_SYS;
+
+MISS_SYS: 
+  fprintf(stderr, "ERROR: distro not indentified.\n");
+  exit(1);
+}
+
 int main(void) {
-  PackageManagerCommands packager = packagers[PACKAGE_MANAGER_PACMAN];
+  PackageManagerCommands packager = indentifyLinuxDistroPackager();
   upgradeSystem(packager);
   installPackage(packager, "discord");
   removePackage(packager, "discord");
