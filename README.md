@@ -7,8 +7,8 @@ simple and featured time saver packager, qwe is a abstraction layer that handle 
 <details>
 <summary markdown="span"><h3>todo list</h3></summary>
 
-- [ ] get, unget and sync packages.
-- [ ] compatibility with the most used distros and packages managers.
+- [x] get, unget and sync packages.
+- [x] compatibility with the most used distros and packages managers.
 - [ ] get packages from a list (remote and local).
 
 </details>
@@ -18,6 +18,7 @@ simple and featured time saver packager, qwe is a abstraction layer that handle 
 git clone https://github.com/lipe14-ops/qwe.git
 cd qwe
 make
+cd ./dist/qwe /bin
 ```
 
 ## author
