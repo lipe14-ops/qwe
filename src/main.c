@@ -28,8 +28,16 @@ void installPackage(PackageManagerCommands packager, char * packageName) {
   system(command);
 }
 
+void removePackage(PackageManagerCommands packager, char * packageName) {
+  char command[strlen(packageName) + strlen(packager.remove)];
+  sprintf(command, packager.remove, packageName);
+  system(command);
+}
+
+
 int main(void) {
   PackageManagerCommands packager = packagers[PACKAGE_MANAGER_PACMAN];
   installPackage(packager, "discord");
+  removePackage(packager, "discord");
   return 0;
 }
