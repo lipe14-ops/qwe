@@ -34,9 +34,13 @@ void removePackage(PackageManagerCommands packager, char * packageName) {
   system(command);
 }
 
+void upgradeSystem(PackageManagerCommands packager) {
+  system(packager.update);
+}
 
 int main(void) {
   PackageManagerCommands packager = packagers[PACKAGE_MANAGER_PACMAN];
+  upgradeSystem(packager);
   installPackage(packager, "discord");
   removePackage(packager, "discord");
   return 0;
