@@ -86,10 +86,24 @@ MISS_SYS:
   exit(1);
 }
 
-int main(void) {
+int main(int argc, char ** argv) {
+
+  if (argc != 3) {
+    fprintf(stderr, "ERROR: arguments are wrong.\n");
+    return 1;
+  }
+
   PackageManagerCommands packager = indentifyLinuxDistroPackager();
-  upgradeSystem(packager);
-  installPackage(packager, "discord");
-  removePackage(packager, "discord");
+
+  if (strcmp(argv[1], "get") == 0) {
+    installPackage(packager, argv[2]);
+  } else if (strcmp(argv[1], "unget") == 0) {
+    removePackage(packager, argv[2]);
+  } else if (strcmp(argv[1], "sync") == 0 && strcmp(argv[2], "sys") == 0) {
+    upgradeSystem(packager);
+  } else {
+    fprintf(stderr, "ERROR: arguments are wrong.\n");
+  }
+
   return 0;
 }
